@@ -26,7 +26,7 @@ class MainApp(App):
                 button = Button(
                     text=label,
                     pos_hint={"center_x": 0.5, "center_y": 0.5},
-                    background_color='red' if (label in ('/', '*', '-', '+')) else 'white'
+                    background_color='green' if (label in self.operators) else 'white'
                 )
                 button.bind(on_press=self.on_button_press)
                 h_layout.add_widget(button)
