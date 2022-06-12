@@ -6,6 +6,7 @@ from kivy.uix.textinput import TextInput
 
 class MainApp(App):
     def build(self):
+        #pass
         self.operators = ["/", "*", "+", "-"]
         self.last_was_operator = None
         self.last_button = None
@@ -26,14 +27,14 @@ class MainApp(App):
                 button = Button(
                     text=label,
                     pos_hint={"center_x": 0.5, "center_y": 0.5},
-                    background_color='green' if (label in self.operators) else 'white'
+                    background_color='green' if (label in self.operators + [".", "C"]) else 'grey'
                 )
                 button.bind(on_press=self.on_button_press)
                 h_layout.add_widget(button)
             main_layout.add_widget(h_layout)
 
         equals_button = Button(
-            text="=", pos_hint={"center_x": 0.5, "center_y": 0.5}
+            text="=", pos_hint={"center_x": 0.5, "center_y": 0.5}, background_color='cyan'
         )
         equals_button.bind(on_press=self.on_solution)
         main_layout.add_widget(equals_button)
@@ -55,6 +56,9 @@ class MainApp(App):
             elif current == "" and button_text in self.operators:
                 # First character cannot be an operator
                 return
+            elif self.last_button == '=' and button_text not in self.operators:
+                new_text = button_text
+                self.solution.text = new_text
             else:
                 new_text = current + button_text
                 self.solution.text = new_text
@@ -63,10 +67,10 @@ class MainApp(App):
 
     def on_solution(self, instance):
         text = self.solution.text
-        if text:
+        if text and not self.last_was_operator:
             solution = str(eval(self.solution.text))
             self.solution.text = solution
-
+        self.last_button = '=';
 
 if __name__ == "__main__":
     app = MainApp()
